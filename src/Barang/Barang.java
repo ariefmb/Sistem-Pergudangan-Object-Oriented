@@ -1,9 +1,10 @@
+// Barang.java
 package Barang;
 
 public abstract class Barang {
     protected String kodeBarang;
     private String namaBarang;
-    private int stok;
+    protected int stok;
 
     public Barang(String kodeBarang, String namaBarang, int stok) {
         this.kodeBarang = kodeBarang;
@@ -26,4 +27,6 @@ public abstract class Barang {
     public abstract void uniqueCode();
 
     public abstract void infoBarang();
+
+    public abstract void kurangiStok(int jumlah);
 }

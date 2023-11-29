@@ -1,15 +1,13 @@
+// Dokumen.java
 package Barang;
 
 public class Dokumen extends Barang {
     private String kategori;
+
     public Dokumen(String kodeBarang, String namaBarang, int stok) {
         super(kodeBarang, namaBarang, stok);
-        this.kategori = "Elektronik";
+        this.kategori = "Dokumen";
         uniqueCode();
-    }
-
-    public String getKategori() {
-        return kategori;
     }
 
     @Override
@@ -19,9 +17,15 @@ public class Dokumen extends Barang {
 
     @Override
     public void infoBarang() {
-        System.out.println("Kode Barang : " +getKodeBarang()+
-                "Nama Barang : " +getNamaBarang()+
-                "Stok Barang : " +getStok()+
-                "Kategori Barang : " +getKategori());
+        System.out.println("Kode Barang : " + getKodeBarang() +
+                "\nNama Barang : " + getNamaBarang() +
+                "\nStok Barang : " + getStok() +
+                "\nKategori Barang : " + kategori);
+    }
+
+    @Override
+    public void kurangiStok(int jumlah) {
+        // Implement logic specific to Dokumen
+        this.stok -= jumlah;
     }
 }

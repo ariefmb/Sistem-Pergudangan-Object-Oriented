@@ -1,12 +1,15 @@
+// Dashboard.java
 package Sistem;
 
 import Barang.*;
+
 import java.util.Scanner;
 
 public class Dashboard {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int id = 0;
+        DataBarang dataBarangSystem = new DataBarang();
 
         System.out.println("=====SELAMAT DATANG DI SISTEM GUDANG=====");
         while (true) {
@@ -25,10 +28,10 @@ public class Dashboard {
                 case 1:
                     while (true) {
                         DataBarang dataBarang = new DataBarang();
-                        String kodeBarang, namaBarang, idSupplier, namaSupplier, tambahBarang;
+                        String kodeBarang, namaBarang, tambahBarang;
                         int stok, kategori;
                         id += 1;
-                        kodeBarang = "0" +id;
+                        kodeBarang = "0" + id;
 
                         System.out.println("\n=====PENERIMAAN BARANG=====");
                         System.out.println("\nSilahkan isi form barang");
@@ -42,43 +45,55 @@ public class Dashboard {
                                 "\t3. Bahan Makanan \t4. Dokumen");
                         System.out.print("Kategori Pilihan : ");
                         kategori = scanner.nextInt();
-//====================================================================================================
-                        System.out.print("\nMasukkan ID Supplier : "); // BELUM DIBUAT !!!!!
-                        idSupplier = scanner.nextLine();
-                        System.out.print("Masukkan nama \t: ");
-                        namaSupplier = scanner.nextLine();
-//====================================================================================================
+
                         if (kategori == 1) {
                             Barang pakaian = new Pakaian(kodeBarang, namaBarang, stok);
-                            dataBarang.tambahBarang(pakaian);
+                            dataBarangSystem.tambahBarang(pakaian);
                         } else if (kategori == 2) {
                             Barang elektronik = new Elektronik(kodeBarang, namaBarang, stok);
-                            dataBarang.tambahBarang(elektronik);
+                            dataBarangSystem.tambahBarang(elektronik);
                         } else if (kategori == 3) {
                             Barang bahanMakanan = new BahanMakanan(kodeBarang, namaBarang, stok);
-                            dataBarang.tambahBarang(bahanMakanan);
+                            dataBarangSystem.tambahBarang(bahanMakanan);
                         } else {
                             Barang dokumen = new Dokumen(kodeBarang, namaBarang, stok);
-                            dataBarang.tambahBarang(dokumen);
+                            dataBarangSystem.tambahBarang(dokumen);
                         }
 
                         System.out.print("\n\t+Tambah Barang (y/n): ");
                         tambahBarang = scanner.nextLine();
-                        if (tambahBarang == "n") {
+                        if (tambahBarang.equals("n")) {
                             System.out.println("Barang telah tersimpan.");
                             System.out.println("Cetak bukti penyimpanan.");
-//================================Cetak Bukti Penyimpanan=============================================
+                            dataBarangSystem.tampilkanDaftarBarang();
                             break;
                         }
                     }
+                    break;
                 case 2:
                     System.out.println("\n=====PENGELUARAN BARANG=====");
+                    System.out.print("Masukkan ID Barang yang akan dikeluarkan: ");
+                    String idBarangKeluar = scanner.nextLine();
+                    Barang barangKeluar = dataBarangSystem.cariBarang(idBarangKeluar);
+                    if (barangKeluar != null) {
+                        System.out.println("Informasi Barang yang akan dikeluarkan:");
+                        barangKeluar.infoBarang();
+                        System.out.print("Masukkan jumlah barang yang akan dikeluarkan: ");
+                        int jumlahKeluar = scanner.nextInt();
+                        scanner.nextLine();
+                        KurangiStok.kurangiStok(barangKeluar, jumlahKeluar);
+                        System.out.println("Barang telah dikeluarkan.");
+                    } else {
+                        System.out.println("Barang dengan ID " + idBarangKeluar + " tidak ditemukan.");
+                    }
                     break;
                 case 3:
                     System.out.println("\n=====CEK STOK=====");
+                    dataBarangSystem.tampilkanDaftarBarang();
                     break;
                 case 4:
                     System.out.println("\n=====INFORMASI SUPPLIER=====");
+                    // Implement supplier information
                     break;
                 case 0:
                     scanner.close();

@@ -1,15 +1,13 @@
+// Pakaian.java
 package Barang;
 
 public class Pakaian extends Barang {
     private String kategori;
+
     public Pakaian(String kodeBarang, String namaBarang, int stok) {
         super(kodeBarang, namaBarang, stok);
         this.kategori = "Pakaian";
         uniqueCode();
-    }
-
-    public String getKategori() {
-        return kategori;
     }
 
     @Override
@@ -19,9 +17,15 @@ public class Pakaian extends Barang {
 
     @Override
     public void infoBarang() {
-        System.out.println("Kode Barang : " +getKodeBarang()+
-                "Nama Barang : " +getNamaBarang()+
-                "Stok Barang : " +getStok()+
-                "Kategori Barang : " +getKategori());
+        System.out.println("Kode Barang : " + getKodeBarang() +
+                "\nNama Barang : " + getNamaBarang() +
+                "\nStok Barang : " + getStok() +
+                "\nKategori Barang : " + kategori);
+    }
+
+    @Override
+    public void kurangiStok(int jumlah) {
+        // Implement logic specific to Pakaian
+        this.stok -= jumlah;
     }
 }

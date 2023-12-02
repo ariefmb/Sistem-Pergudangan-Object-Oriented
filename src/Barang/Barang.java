@@ -1,5 +1,6 @@
-// Barang.java
 package Barang;
+
+import Supplier.Supplier;
 
 public abstract class Barang {
     protected String kodeBarang;
@@ -24,9 +25,8 @@ public abstract class Barang {
         return stok;
     }
 
+
     public abstract void uniqueCode();
-
-    public abstract void infoBarang();
-
     public abstract void kurangiStok(int jumlah);
+    public abstract String infoBarang();
 }

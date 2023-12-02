@@ -1,22 +1,22 @@
-// Dashboard.java
 package Sistem;
 
 import Barang.*;
-
+import Supplier.Supplier;
 import java.util.Scanner;
 
 public class Dashboard {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        int id = 0;
-        DataBarang dataBarangSystem = new DataBarang();
+        int idPK = 0, idEL = 0, idBM = 0, idDK = 0, idGudang = 0;
+        Gudang gudang = new Gudang();
+        Inventory inventory = new Inventory();
 
         System.out.println("=====SELAMAT DATANG DI SISTEM GUDANG=====");
         while (true) {
             System.out.println("\nSilahkan pilih menu kelola berikut");
             System.out.println("1. Penerimaan Barang");
             System.out.println("2. Pengeluaran Barang");
-            System.out.println("3. Cek Stok");
+            System.out.println("3. Data Barang");
             System.out.println("4. Informasi Supplier");
             System.out.println("0. Logout");
             System.out.print("Masukkan pilihan: ");
@@ -26,74 +26,108 @@ public class Dashboard {
 
             switch (menu) {
                 case 1:
-                    while (true) {
-                        DataBarang dataBarang = new DataBarang();
-                        String kodeBarang, namaBarang, tambahBarang;
-                        int stok, kategori;
-                        id += 1;
-                        kodeBarang = "0" + id;
+                    inventory = new Inventory();
+                    idGudang += 1;
+                    String kodeGudang = "0" + idGudang;
 
-                        System.out.println("\n=====PENERIMAAN BARANG=====");
-                        System.out.println("\nSilahkan isi form barang");
+                    System.out.println("\n=====PENERIMAAN BARANG=====");
+                    System.out.println("=====ISI DATA SUPPLIER=====");
+                    System.out.print("ID Supplier : ");
+                    String idSupplier = scanner.nextLine();
+                    System.out.print("Nama PT \t: ");
+                    String namaPT = scanner.nextLine();
+                    System.out.print("No. Telepon : ");
+                    String noTelp = scanner.nextLine();
+                    System.out.print("Alamat \t\t: ");
+                    String alamat = scanner.nextLine();
+                    Supplier supplier = new Supplier(idSupplier, namaPT, noTelp, alamat);
+
+                    while (true) {
+                        Barang barang;
+
+                        System.out.println("\n=====ISI DATA BARANG=====");
                         System.out.print("Nama Barang\t\t: ");
-                        namaBarang = scanner.nextLine();
+                        String namaBarang = scanner.nextLine();
                         System.out.print("Jumlah Barang\t: ");
-                        stok = scanner.nextInt();
+                        int stok = scanner.nextInt();
                         scanner.nextLine();
                         System.out.println("Kategori Barang");
                         System.out.println("1. Pakaian \t2. Elektronik " +
                                 "\t3. Bahan Makanan \t4. Dokumen");
                         System.out.print("Kategori Pilihan : ");
-                        kategori = scanner.nextInt();
+                        int kategori = scanner.nextInt();
+                        scanner.nextLine();
 
                         if (kategori == 1) {
-                            Barang pakaian = new Pakaian(kodeBarang, namaBarang, stok);
-                            dataBarangSystem.tambahBarang(pakaian);
+                            idPK += 1;
+                            String kodeBarang = "0" + idPK;
+                            barang = new Pakaian(kodeBarang, namaBarang, stok);
                         } else if (kategori == 2) {
-                            Barang elektronik = new Elektronik(kodeBarang, namaBarang, stok);
-                            dataBarangSystem.tambahBarang(elektronik);
+                            idEL += 1;
+                            String kodeBarang = "0" + idEL;
+                            barang = new Elektronik(kodeBarang, namaBarang, stok);
                         } else if (kategori == 3) {
-                            Barang bahanMakanan = new BahanMakanan(kodeBarang, namaBarang, stok);
-                            dataBarangSystem.tambahBarang(bahanMakanan);
+                            idBM += 1;
+                            String kodeBarang = "0" + idBM;
+                            barang = new BahanMakanan(kodeBarang, namaBarang, stok);
                         } else {
-                            Barang dokumen = new Dokumen(kodeBarang, namaBarang, stok);
-                            dataBarangSystem.tambahBarang(dokumen);
+                            idDK += 1;
+                            String kodeBarang = "0" + idDK;
+                            barang = new Dokumen(kodeBarang, namaBarang, stok);
                         }
+                        inventory.terimaBarang(supplier, barang);
 
                         System.out.print("\n\t+Tambah Barang (y/n): ");
-                        tambahBarang = scanner.nextLine();
+                        String tambahBarang = scanner.nextLine();
                         if (tambahBarang.equals("n")) {
-                            System.out.println("Barang telah tersimpan.");
-                            System.out.println("Cetak bukti penyimpanan.");
-                            dataBarangSystem.tampilkanDaftarBarang();
+                            gudang.setKodeGudang(kodeGudang);
+                            gudang.simpanBarang(inventory);
+                            System.out.println("Barang telah tersimpan.\n");
+                            System.out.println("======== TANDA TERIMA BARANG ========");
+                            inventory.tampilkanData();
                             break;
                         }
                     }
                     break;
                 case 2:
                     System.out.println("\n=====PENGELUARAN BARANG=====");
-                    System.out.print("Masukkan ID Barang yang akan dikeluarkan: ");
-                    String idBarangKeluar = scanner.nextLine();
-                    Barang barangKeluar = dataBarangSystem.cariBarang(idBarangKeluar);
-                    if (barangKeluar != null) {
-                        System.out.println("Informasi Barang yang akan dikeluarkan:");
-                        barangKeluar.infoBarang();
-                        System.out.print("Masukkan jumlah barang yang akan dikeluarkan: ");
-                        int jumlahKeluar = scanner.nextInt();
+                    System.out.print("Masukkan kode barang: ");
+                    String kodeBarang = scanner.nextLine();
+                    Barang barang = gudang.cariBarang(kodeBarang);
+
+                    if (barang != null) {
+                        System.out.println("Barang ditemukan.");
+                        System.out.println(barang.infoBarang());
+                        System.out.println("\nPilih tindakan berikut");
+                        System.out.println("1. Kurangi stok \t2. Berhenti menyimpan");
+                        System.out.print("Pilihan : ");
+                        int pilihan = scanner.nextInt();
                         scanner.nextLine();
-                        KurangiStok.kurangiStok(barangKeluar, jumlahKeluar);
-                        System.out.println("Barang telah dikeluarkan.");
+
+                        switch (pilihan) {
+                            case 1 :
+                                System.out.print("Masukkan jumlah yang dikurangi : ");
+                                int jumlah = scanner.nextInt();
+                                scanner.nextLine();
+                                gudang.kurangiBarang(barang.getKodeBarang(), jumlah);
+                                break;
+                            case 2 :
+                                gudang.keluarkanBarang(barang);
+                                break;
+                            default :
+                                System.out.println("Invalid option.");
+                        }
                     } else {
-                        System.out.println("Barang dengan ID " + idBarangKeluar + " tidak ditemukan.");
+                        System.out.println("Barang dengan kode: " +kodeBarang+ " tidak ditemukan.");
                     }
                     break;
                 case 3:
-                    System.out.println("\n=====CEK STOK=====");
-                    dataBarangSystem.tampilkanDaftarBarang();
+                    System.out.println("\n=====DATA BARANG=====");
+                    gudang.dataBarang();
                     break;
                 case 4:
-                    System.out.println("\n=====INFORMASI SUPPLIER=====");
-                    // Implement supplier information
+                    System.out.println("\n========= INFORMASI SUPPLIER ========");
+                    gudang.dataSupplier();
                     break;
                 case 0:
                     scanner.close();

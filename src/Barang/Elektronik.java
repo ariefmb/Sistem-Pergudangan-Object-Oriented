@@ -1,5 +1,6 @@
-// Elektronik.java
 package Barang;
+
+import Supplier.Supplier;
 
 public class Elektronik extends Barang {
     private String kategori;
@@ -10,22 +11,34 @@ public class Elektronik extends Barang {
         uniqueCode();
     }
 
-    @Override
-    public void uniqueCode() {
-        kodeBarang = "EL" + getKodeBarang();
+    public String getKategori() {
+        return kategori;
     }
 
     @Override
-    public void infoBarang() {
-        System.out.println("Kode Barang : " + getKodeBarang() +
-                "\nNama Barang : " + getNamaBarang() +
-                "\nStok Barang : " + getStok() +
-                "\nKategori Barang : " + kategori);
+    public void uniqueCode() {
+        this.kodeBarang = "EL" + getKodeBarang();
     }
 
     @Override
     public void kurangiStok(int jumlah) {
-        // Implement logic specific to Elektronik
-        this.stok -= jumlah;
+        if (jumlah > getStok()) {
+            System.out.println("Jumlah yang dikeluarkan melebihi " +
+                    "stok.");
+        } else {
+            this.stok -= jumlah;
+            System.out.println("Stok telah dikurangi.\n");
+            System.out.println(infoBarang());
+        }
+    }
+
+    @Override
+    public String infoBarang() {
+        return "============ Data Barang ============\n" +
+                "Kode Barang \t: " +getKodeBarang()+ "\n" +
+                "Nama Barang \t: " +getNamaBarang()+ "\n" +
+                "Stok Barang \t: " +getStok()+ "\n" +
+                "Kategori Barang : " +getKategori()+ "\n" +
+                "=====================================";
     }
 }
